@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -10,8 +11,14 @@ import (
 )
 
 func createRandomAccount(t *testing.T) Account {
-	arg := CreateAccountParams{Owner: util.RandomOwner(), Balance: util.RandomMoney(), Currency: util.RandomCurrency()}
+	user := createRandomUser(t)
+	arg := CreateAccountParams{
+		Owner:    user.Username,
+		Balance:  util.RandomMoney(),
+		Currency: util.RandomCurrency(),
+	}
 	account, err := testQueries.CreateAccount(context.Background(), arg)
+	fmt.Println(account)
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
 
